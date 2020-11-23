@@ -1,0 +1,17 @@
+package lab.management.Errors;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(code = HttpStatus.NOT_FOUND)
+public class ServerError extends HTTPError{
+    
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+
+    public ServerError() {
+        super(500, "Server Error");
+    }
+}
