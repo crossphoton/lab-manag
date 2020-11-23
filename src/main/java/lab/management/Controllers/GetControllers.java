@@ -1,6 +1,6 @@
 package lab.management.Controllers;
 
-import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lab.management.Errors.HTTPError;
+import lab.management.Errors.NotAllowed;
 import lab.management.Errors.NotFound;
 import lab.management.Errors.ServerError;
 import lab.management.Services.AnnouncementService;
@@ -47,15 +48,18 @@ public class GetControllers {
 	}
 
 
-	@GetMapping(value="/api/user")
-	public String getMethodName(@RequestBody Dictionary<Object, Object> user) {
+	@GetMapping(value="/api/users")
+	public String getMethodName(@RequestBody HashMap<Object, Object> user) {
 		String result = null;
+
 		try{
 			result = UserService.signin(user);
 		} catch(NotFound error){
 			result = "User not found";
 		} catch(ServerError error){
 			result = "Server Error";
+		} catch(NotAllowed error){
+			result = "Wrong Credentials";
 		}
 
 		return result;

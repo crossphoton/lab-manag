@@ -28,7 +28,7 @@ public class PostControllers {
 		String result = null;
 
 		try{
-			UserService.signup(user);
+			result = UserService.signup(user);
 		} catch(ServerError error){
 			System.out.println(error);
 			result = "Failed";

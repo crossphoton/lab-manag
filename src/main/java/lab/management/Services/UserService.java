@@ -1,6 +1,6 @@
 package lab.management.Services;
 
-import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,22 +19,24 @@ public class UserService {
 
     static CollectionReference userRef = db.collection("users");
 
-    public static String signin(Dictionary<Object, Object> user) throws NotFound, ServerError {
+    public static String signin(HashMap<Object, Object> user) throws NotFound, ServerError, NotAllowed {
 
         String username = user.get("username").toString();
 
         try{
-            Object[] query = userRef.whereEqualTo("username", username).get().get().getDocuments().toArray();
-            if(query.length == 1){
+            List<QueryDocumentSnapshot> query = userRef.whereEqualTo("username", username).get().get().getDocuments();
+            if(query.size() != 1){
                 throw new NotFound();
             } else {
-                Users foundUser = new ObjectMapper().convertValue(query[0], Users.class);
 
-                System.out.println(foundUser);
+                Object test = query.get(0).toObject(Object.class);
+                ObjectMapper mapper = new ObjectMapper();
 
-                if(foundUser.password == user.get("password")){
-                    return JWT_Helper.createUserToken(foundUser.username, foundUser.role);
-                } else{ throw new Exception(new NotAllowed()); }
+                HashMap<Object, Object> foundUser = mapper.convertValue(test, HashMap.class);
+
+                if(foundUser.get("password").equals(user.get("password")))
+                    return JWT_Helper.createUserToken(foundUser.get("username").toString(), foundUser.get("role").toString());
+                else throw new NotAllowed();
             }
         }
         catch (Exception error) {
@@ -50,7 +52,7 @@ public class UserService {
             List<QueryDocumentSnapshot> test = userRef.whereEqualTo("username", user.username).get().get().getDocuments();
 
             if(test.size() > 0){
-                throw new Exception(new NotAllowed());
+                throw new NotAllowed();
             }
         } catch(Exception error){
             System.out.println(error);

@@ -5,7 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 
 
-import com.auth0.jwt.*;
+import com.auth0.jwt.JWT;
 
 public class JWT_Helper {
 
@@ -18,15 +18,14 @@ public class JWT_Helper {
 
             String token = JWT.create()
                             .withIssuer("crosphoton")
-                            .withSubject(username)
-                            .withSubject(user_role)
+                            .withClaim("username", username)
+                            .withClaim("role", user_role)
                             .sign(algo);
-            System.out.println(token);
 
             return token;
         } catch(JWTCreationException error){
             System.out.println(error);
-            return "Error occured";
+            return null;
         }
     }
     
