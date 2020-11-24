@@ -14,4 +14,16 @@ public class Users {
         this.name = name;
         this.role = role;
     }
+
+
+    public boolean check(){
+        boolean result = true;
+
+        if(this.username == null) result = false;
+        if(this.name == null) result = false;
+        if(this.password == null) result = false;
+        if(this.role == null) result = false;
+        
+        return result;
+    }
 }

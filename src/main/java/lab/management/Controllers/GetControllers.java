@@ -3,15 +3,19 @@ package lab.management.Controllers;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lab.management.Errors.HTTPError;
 import lab.management.Errors.NotAllowed;
 import lab.management.Errors.NotFound;
 import lab.management.Errors.ServerError;
+import lab.management.Middlewares.JWT_Helper;
 import lab.management.Services.AnnouncementService;
 import lab.management.Services.UserService;
 
@@ -23,22 +27,18 @@ public class GetControllers {
 	
 	@GetMapping("/")
 	public String home() {
-		return "Test";
-	}
-	
-	@GetMapping("/error")
-	public String error() {
-		return "Some error occured";
+		return "This is home";
 	}
 	
 	@GetMapping("/api/announcement/all")
-	public List<Object> getAllAnnouncements() {
-		
+	public List<Object> getAllAnnouncements(@CookieValue(name = "token", defaultValue = "") String token) {
+		if(!JWT_Helper.checkStudent(token)) return null;
 		return AnnouncementService.getAll();
 	}
 
-	@GetMapping("/api/announcement")
-	public Object getAnnouncement(@RequestParam String id){
+	@GetMapping("/api/announcement/{id}")
+	public Object getAnnouncement(@PathVariable String id, @CookieValue(name = "token", defaultValue = "") String token){
+		if(!JWT_Helper.checkStudent(token)) return null;
 		Object result = AnnouncementService.getAnnoucement(id);
 		if(result.equals(new HTTPError(500, "Server Error")) | result.equals(new HTTPError(404, "Not found"))){
 			System.out.println("Error");
@@ -49,7 +49,7 @@ public class GetControllers {
 
 
 	@GetMapping(value="/api/users")
-	public String getMethodName(@RequestBody HashMap<Object, Object> user) {
+	public String getMethodName(@RequestBody HashMap<Object, Object> user, HttpServletResponse response) {
 		String result = null;
 
 		try{
@@ -61,6 +61,8 @@ public class GetControllers {
 		} catch(NotAllowed error){
 			result = "Wrong Credentials";
 		}
+
+		if(result != null) response.addHeader("Set-Cookie", "token="+result+"; Path=/;HttpOnly;Max-Age=36000");
 
 		return result;
 	}

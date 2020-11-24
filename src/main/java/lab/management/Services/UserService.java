@@ -47,6 +47,8 @@ public class UserService {
 
     public static String signup(Users user) throws ServerError, NotAllowed {
 
+        if(!user.check()) throw new NotAllowed();
+
         user.role = "ROLE_STUDENT";
         try{
             List<QueryDocumentSnapshot> test = userRef.whereEqualTo("username", user.username).get().get().getDocuments();
