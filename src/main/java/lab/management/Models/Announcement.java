@@ -31,6 +31,11 @@ public class Announcement {
 		this.body = body;
 		this.owner = owner;
 	}
+	public Announcement() {
+		setTitle("title");
+		setBody("body");
+		setOwner("owner");
+	}
 	
 	
 }

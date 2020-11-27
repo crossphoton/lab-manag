@@ -17,6 +17,7 @@ import lab.management.Errors.NotFound;
 import lab.management.Errors.ServerError;
 import lab.management.Middlewares.JWT_Helper;
 import lab.management.Services.AnnouncementService;
+import lab.management.Services.TaskService;
 import lab.management.Services.UserService;
 
 
@@ -33,20 +34,19 @@ public class GetControllers {
 	@GetMapping("/api/announcement/all")
 	public List<Object> getAllAnnouncements(@CookieValue(name = "token", defaultValue = "") String token) {
 		if(!JWT_Helper.checkStudent(token)) return null;
-		return AnnouncementService.getAll();
+		return AnnouncementService.get();
 	}
 
 	@GetMapping("/api/announcement/{id}")
 	public Object getAnnouncement(@PathVariable String id, @CookieValue(name = "token", defaultValue = "") String token){
 		if(!JWT_Helper.checkStudent(token)) return null;
-		Object result = AnnouncementService.getAnnoucement(id);
+		Object result = AnnouncementService.get(id);
 		if(result.equals(new HTTPError(500, "Server Error")) | result.equals(new HTTPError(404, "Not found"))){
 			System.out.println("Error");
 		}
 
 		return result;
 	}
-
 
 	@GetMapping(value="/api/users")
 	public String getMethodName(@RequestBody HashMap<Object, Object> user, HttpServletResponse response) {
@@ -67,7 +67,23 @@ public class GetControllers {
 		return result;
 	}
 	
+	@GetMapping("/api/task/all")
+	public List<Object> getAllTasks(@CookieValue(name = "token", defaultValue = "") String token) {
+		if(!JWT_Helper.checkStudent(token)) return null;
+		return TaskService.get();
+	}
 
+	@GetMapping("/api/task/{id}")
+	public Object getTask(@PathVariable String id, @CookieValue(name = "token", defaultValue = "") String token){
+		if(!JWT_Helper.checkStudent(token)) return null;
+		Object result = TaskService.get(id);
+		if(result.equals(new HTTPError(500, "Server Error")) | result.equals(new HTTPError(404, "Not found"))){
+			System.out.println("Error");
+		}
+
+		return result;
+	}
+	
 }
 
 

@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
@@ -19,11 +20,12 @@ import com.google.firebase.cloud.FirestoreClient;
 public class AnnouncementService {
 
     static Firestore db = FirestoreClient.getFirestore();
+    static CollectionReference announcementReference = db.collection("announcement");
     
 
-    public static List<Object>getAll(){        
+    public static List<Object>get(){        
 
-        ApiFuture<QuerySnapshot> future =  db.collection("announcement").get();
+        ApiFuture<QuerySnapshot> future =  announcementReference.get();
         List<Object> data = new ArrayList<>();
         List<QueryDocumentSnapshot> docs;
 
@@ -47,9 +49,9 @@ public class AnnouncementService {
     }
 
 
-    public static Object getAnnoucement(String document){
+    public static Object get(String document){
 
-        DocumentReference docRef = db.collection("announcement").document(document);
+        DocumentReference docRef = announcementReference.document(document);
 
         ApiFuture<DocumentSnapshot> future = docRef.get();
 
@@ -71,29 +73,16 @@ public class AnnouncementService {
     }
 
 
-    public static String saveAnnouncement(Announcement toSave){
+    public static String save(Announcement toSave){
         
-        db.collection("announcement").add(toSave);
+        announcementReference.add(toSave);
         return "Noted!!";
     }
+    
 
+    public static String delete(String id){
 
-
-    public static String deleteAnnouncement(String id){
-
-
-        db.collection("announcement").document(id).delete();
-
-        return "Noted!!";
-    }
-
-
-    public static String updateAnnouncement(String id, Announcement toUpdate){
-
-
-        db.collection("announcement").document(id);
-
-
+        announcementReference.document(id).delete();
         return "Noted!!";
     }
 }

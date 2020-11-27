@@ -1,6 +1,11 @@
 package lab.management.Controllers;
 
+import java.util.concurrent.ExecutionException;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,42 +14,92 @@ import lab.management.Errors.NotAllowed;
 import lab.management.Errors.ServerError;
 import lab.management.Middlewares.JWT_Helper;
 import lab.management.Models.Announcement;
+import lab.management.Models.Task;
 import lab.management.Models.Users;
 import lab.management.Services.AnnouncementService;
+import lab.management.Services.TaskService;
 import lab.management.Services.UserService;
 
 @RestController
 public class PostControllers {
-	
+
 	@PostMapping("/api/announcement")
-	public Object postAnnouncement(@RequestBody Announcement toSaveAnnouncement, @CookieValue (name = "token", defaultValue = "") String token)
-			throws NotAllowed {
+	public String postAnnouncement(@RequestBody Announcement toSave,
+			@CookieValue(name = "token", defaultValue = "") String token) throws NotAllowed {
 
-		if(token.equals("")) return "Not logged in";
+		if (token.equals(""))
+			return "Not logged in";
 
-		if(!JWT_Helper.checkTeacher(token)) throw new NotAllowed();
+		if (!JWT_Helper.checkTeacher(token))
+			throw new NotAllowed();
 
-		return AnnouncementService.saveAnnouncement(toSaveAnnouncement);
-		
+		toSave.setOwner(JWT_Helper.getUsername(token));
+
+		return AnnouncementService.save(toSave);
+
 	}
 
-
 	@PostMapping("/api/users")
-	public String newUser(@RequestBody Users user){
+	public String newUser(@RequestBody Users user, HttpServletResponse response) {
 
 		String result = null;
 
-		try{
+		try {
 			result = UserService.signup(user);
-		} catch(ServerError error){
+		} catch (ServerError error) {
 			System.out.println(error);
 			result = "Failed";
-		} catch(NotAllowed error){
-			result = "User already exists with the username: "+user.username;
+		} catch (NotAllowed error) {
+			result = "User already exists with the username: " + user.username;
 		}
 
-
+		if (result != null)
+			response.addHeader("Set-Cookie", "token=" + result + "; Path=/;HttpOnly;Max-Age=36000");
 		return result;
+	}
+
+	@PostMapping("/api/task")
+	public String postTask(@RequestBody Task toSave, @CookieValue(name = "token", defaultValue = "") String token)
+			throws NotAllowed {
+
+		if (token.equals(""))
+			return "Not logged in";
+
+		if (!JWT_Helper.checkTeacher(token))
+			throw new NotAllowed();
+
+		toSave.setOwner(JWT_Helper.getUsername(token));
+		try {
+			return TaskService.save(toSave);
+		} catch (ServerError err) {
+			return "Some Error Occured!!";
+		}
+	}
+
+	@PostMapping("/api/task/updateMarks/{id}")
+	public String updateMarksInTask(@CookieValue(name = "token", defaultValue = "") String token,
+			@RequestBody UpdateMarksHelperClass updates, @PathVariable String id)
+			throws NotAllowed, InterruptedException, ExecutionException {
+
+		if(token.equals("")) return "Not logged in";
+		if(!JWT_Helper.checkTeacher(token)) throw new NotAllowed();
+
+		return TaskService.updateMarks(id, updates.username, updates.marks);
+	}
+
+
+	static private class UpdateMarksHelperClass{
+		public String username;
+		public int marks;
+		UpdateMarksHelperClass(String username, int marks){
+			this.username = username;
+			this.marks = marks;
+		}
+
+		UpdateMarksHelperClass(){
+			username = "";
+			marks = 0;
+		}
 	}
 
 }

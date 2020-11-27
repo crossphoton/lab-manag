@@ -1,10 +1,12 @@
 package lab.management.Services;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.firebase.cloud.FirestoreClient;
@@ -29,13 +31,14 @@ public class UserService {
                 throw new NotFound();
             } else {
 
-                Object test = query.get(0).toObject(Object.class);
-                ObjectMapper mapper = new ObjectMapper();
+                String foundPassword = query.get(0).getReference().get().get().getData().get("password").toString();
+                String role = query.get(0).getReference().get().get().getData().get("role").toString();
 
-                HashMap<Object, Object> foundUser = mapper.convertValue(test, HashMap.class);
-
-                if(foundUser.get("password").equals(user.get("password")))
-                    return JWT_Helper.createUserToken(foundUser.get("username").toString(), foundUser.get("role").toString());
+                if(foundPassword.equals(user.get("password"))){
+                    DocumentReference docRef = query.get(0).getReference();
+                    docRef.update("lastLogin", new SimpleDateFormat("yyyy-mm-dd hh:mm:ss").format(Calendar.getInstance().getTime()));
+                    return JWT_Helper.createUserToken(user.get("username").toString(), role);
+                }
                 else throw new NotAllowed();
             }
         }
@@ -52,7 +55,6 @@ public class UserService {
         user.role = "ROLE_STUDENT";
         try{
             List<QueryDocumentSnapshot> test = userRef.whereEqualTo("username", user.username).get().get().getDocuments();
-
             if(test.size() > 0){
                 throw new NotAllowed();
             }
@@ -61,7 +63,7 @@ public class UserService {
             throw new ServerError();
         }
         userRef.add(user);
-        return "Noted!!";
+        return JWT_Helper.createUserToken(user.username, user.role);
     }
     
 }

@@ -1,10 +1,14 @@
 package lab.management.Models;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class Users {
     public String username;
     public String name;
     public String password;
     public String role;
+    public String lastLogin = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss").format(Calendar.getInstance().getTime());;
 
     public Users(){}
 
