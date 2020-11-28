@@ -76,9 +76,9 @@ public class PostControllers {
 		}
 	}
 
-	@PostMapping("/api/task/updateMarks/{id}")
+	@PostMapping("/api/task/{id}/updateMarks")
 	public String updateMarksInTask(@CookieValue(name = "token", defaultValue = "") String token,
-			@RequestBody UpdateMarksHelperClass updates, @PathVariable String id)
+			@RequestBody UpdateMarks_HelperClass updates, @PathVariable String id)
 			throws NotAllowed, InterruptedException, ExecutionException {
 
 		if(token.equals("")) return "Not logged in";
@@ -88,18 +88,22 @@ public class PostControllers {
 	}
 
 
-	static private class UpdateMarksHelperClass{
+	static private class UpdateMarks_HelperClass{
 		public String username;
 		public int marks;
-		UpdateMarksHelperClass(String username, int marks){
-			this.username = username;
-			this.marks = marks;
-		}
+	}
 
-		UpdateMarksHelperClass(){
-			username = "";
-			marks = 0;
-		}
+	@PostMapping("/api/task/{task}/notice")
+	public String addNotice(@CookieValue(name = "token", defaultValue = "") String token,
+			@RequestBody Announcement notice, @PathVariable String task)
+			throws NotAllowed, InterruptedException, ExecutionException {
+
+		if(token.equals("")) return "Not logged in";
+		if(!JWT_Helper.checkTeacher(token)) throw new NotAllowed();
+
+		notice.setOwner(JWT_Helper.getUsername(token));
+
+		return TaskService.addNotice(notice, task);
 	}
 
 }

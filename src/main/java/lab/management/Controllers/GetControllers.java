@@ -83,6 +83,18 @@ public class GetControllers {
 
 		return result;
 	}
+
+	@GetMapping("/api/task/{task}/notice/all")
+	public List<Object> getAllNotice(@CookieValue(name = "token", defaultValue = "") String token, @PathVariable String task) {
+		if(!JWT_Helper.checkStudent(token)) return null;
+		return TaskService.getNotice(task);
+	}
+
+	@GetMapping("/api/task/{task}/notice/{notice}")
+	public Object getNotice(@CookieValue(name = "token", defaultValue = "") String token, @PathVariable String task, @PathVariable String notice) {
+		if(!JWT_Helper.checkStudent(token)) return null;
+		return TaskService.getNotice(task, notice);
+	}
 	
 }
 

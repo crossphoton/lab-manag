@@ -1,6 +1,7 @@
 package lab.management.Services;
 
 import lab.management.Errors.*;
+import lab.management.Models.Announcement;
 import lab.management.Models.Task;
 
 import java.util.ArrayList;
@@ -71,9 +72,7 @@ public class TaskService {
             List<QueryDocumentSnapshot> docs = UserService.userRef.whereEqualTo("role", "ROLE_STUDENT").get().get()
                     .getDocuments();
             for (QueryDocumentSnapshot document : docs) {
-                System.out.println("sjvsob");
                 toSave.studentRecord.put(document.get("username").toString(), 0);
-                System.out.println("78643");
             }
 
         } catch (Exception err) {
@@ -96,8 +95,61 @@ public class TaskService {
 
         DocumentReference data = taskRef.document(taskId).get().get().getReference();
         
-        data.update("studentRecord."+username, marks);
+        data.update("studentRecord." + username, marks);
 
         return "Updated!!";
+    }
+
+    public static String addNotice(Announcement notice, String task) {
+        taskRef.document(task).collection("notice").add(notice);
+        return "Added!!";
+    }
+
+    public static List<Object> getNotice(String task) {
+
+        List<Object> data = new ArrayList<>();
+        try {
+            List<QueryDocumentSnapshot> docs = taskRef.document(task).collection("notice").get().get().getDocuments();
+
+            ObjectMapper mapper = new ObjectMapper();
+
+            for (QueryDocumentSnapshot document : docs) {
+                HashMap<String, Object> entry = new HashMap<String, Object>();
+                entry.put(document.getId(), document.toObject(Object.class));
+
+                data.add(mapper.convertValue(entry, Object.class));
+            }
+        } catch (Exception error) {
+            System.out.println(error);
+        }
+
+        return data;
+
+    }
+
+    public static Object getNotice(String task, String document) {
+
+        Object result;
+
+        try {
+            DocumentSnapshot doc = taskRef.document(task).collection("notice").document(document).get().get();
+            if (doc.exists()) {
+                result = doc.toObject(Object.class);
+            } else {
+                result = new NotFound();
+            }
+
+        } catch (Exception error) {
+            System.out.println(error);
+            result = new ServerError();
+        }
+
+        return result;
+    }
+
+    public static String deleteNotice(String task, String notice) {
+
+        taskRef.document(task).collection("notice").document(notice).delete();
+        return "Deleted!!";
     }
 }

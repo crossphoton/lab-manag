@@ -24,4 +24,10 @@ public class DeleteController {
         return TaskService.delete(id);
     }
 
+    @DeleteMapping("/api/task/{id}/notice/{notice}")
+    public String deleteNotice(@PathVariable String task, @CookieValue(name = "token", defaultValue = "")String token, @PathVariable String notice){
+        if(!JWT_Helper.checkTeacher(token)) return "NOT AUTHORIZED";
+        return TaskService.deleteNotice(task, notice);
+    }
+
 }

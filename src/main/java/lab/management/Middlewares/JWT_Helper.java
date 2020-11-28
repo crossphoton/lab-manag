@@ -84,8 +84,6 @@ public class JWT_Helper {
 
 
     public static String getUsername(String token){
-        if(checkStudent(token)) return null;
-
         String username = JWT.decode(token).getClaim("username").asString();
         return username;
     }
