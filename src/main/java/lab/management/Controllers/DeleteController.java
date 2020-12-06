@@ -1,5 +1,7 @@
 package lab.management.Controllers;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,20 +15,29 @@ import lab.management.Services.TaskService;
 public class DeleteController {
     
     @DeleteMapping("/api/announcement/{id}")
-    public String deleteAnnouncement(@PathVariable String id, @CookieValue(name = "token", defaultValue = "")String token){
-        if(!JWT_Helper.checkTeacher(token)) return "NOT AUTHORIZED";
+    public String deleteAnnouncement(@PathVariable String id, @CookieValue(name = "token", defaultValue = "")String token, HttpServletResponse response){
+        if(!JWT_Helper.checkTeacher(token)) {
+            response.setStatus(403);
+            return "NOT AUTHORIZED";
+        }
         return AnnouncementService.delete(id);
     }
     
     @DeleteMapping("/api/task/{id}")
-    public String deleteTask(@PathVariable String id, @CookieValue(name = "token", defaultValue = "")String token){
-        if(!JWT_Helper.checkTeacher(token)) return "NOT AUTHORIZED";
+    public String deleteTask(@PathVariable String id, @CookieValue(name = "token", defaultValue = "")String token, HttpServletResponse response){
+        if(!JWT_Helper.checkTeacher(token)) {
+            response.setStatus(403);
+            return "NOT AUTHORIZED";
+        }
         return TaskService.delete(id);
     }
 
     @DeleteMapping("/api/task/{id}/notice/{notice}")
-    public String deleteNotice(@PathVariable String task, @CookieValue(name = "token", defaultValue = "")String token, @PathVariable String notice){
-        if(!JWT_Helper.checkTeacher(token)) return "NOT AUTHORIZED";
+    public String deleteNotice(@PathVariable String task, @CookieValue(name = "token", defaultValue = "")String token, @PathVariable String notice, HttpServletResponse response){
+        if(!JWT_Helper.checkTeacher(token)) {
+            response.setStatus(403);
+            return "NOT AUTHORIZED";
+        }
         return TaskService.deleteNotice(task, notice);
     }
 

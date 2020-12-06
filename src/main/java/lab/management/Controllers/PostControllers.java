@@ -25,13 +25,17 @@ public class PostControllers {
 
 	@PostMapping("/api/announcement")
 	public String postAnnouncement(@RequestBody Announcement toSave,
-			@CookieValue(name = "token", defaultValue = "") String token) throws NotAllowed {
+			@CookieValue(name = "token", defaultValue = "") String token, HttpServletResponse response) {
 
-		if (token.equals(""))
-			return "Not logged in";
+		if (token.equals("")){
+			response.setStatus(401);
+			return "UNAUTHORIZED";
+		}
 
-		if (!JWT_Helper.checkTeacher(token))
-			throw new NotAllowed();
+		if(!JWT_Helper.checkTeacher(token)){
+			response.setStatus(403);
+			return "FORBIDDEN";
+		}
 
 		toSave.setOwner(JWT_Helper.getUsername(token));
 
@@ -49,8 +53,10 @@ public class PostControllers {
 		} catch (ServerError error) {
 			System.out.println(error);
 			result = "Failed";
+			response.setStatus(500);
 		} catch (NotAllowed error) {
 			result = "User already exists with the username: " + user.username;
+			response.setStatus(400);
 		}
 
 		if (result != null)
@@ -59,30 +65,42 @@ public class PostControllers {
 	}
 
 	@PostMapping("/api/task")
-	public String postTask(@RequestBody Task toSave, @CookieValue(name = "token", defaultValue = "") String token)
-			throws NotAllowed {
+	public String postTask(@RequestBody Task toSave, @CookieValue(name = "token", defaultValue = "") String token, HttpServletResponse response)
+		{
 
-		if (token.equals(""))
-			return "Not logged in";
+		if (token.equals("")){
+			response.setStatus(401);
+			return "UNAUTHORIZED";
+		}
 
-		if (!JWT_Helper.checkTeacher(token))
-			throw new NotAllowed();
+		if(!JWT_Helper.checkTeacher(token)){
+			response.setStatus(403);
+			return "FORBIDDEN";
+		}
 
 		toSave.setOwner(JWT_Helper.getUsername(token));
 		try {
 			return TaskService.save(toSave);
 		} catch (ServerError err) {
+			response.setStatus(500);
 			return "Some Error Occured!!";
 		}
 	}
 
 	@PostMapping("/api/task/{id}/updateMarks")
 	public String updateMarksInTask(@CookieValue(name = "token", defaultValue = "") String token,
-			@RequestBody UpdateMarks_HelperClass updates, @PathVariable String id)
-			throws NotAllowed, InterruptedException, ExecutionException {
+			@RequestBody UpdateMarks_HelperClass updates, @PathVariable String id, HttpServletResponse response)
+			throws InterruptedException, ExecutionException {
 
-		if(token.equals("")) return "Not logged in";
-		if(!JWT_Helper.checkTeacher(token)) throw new NotAllowed();
+		if (token.equals("")){
+			response.setStatus(401);
+			return "UNAUTHORIZED";
+		}
+
+		if(!JWT_Helper.checkTeacher(token)){
+			response.setStatus(403);
+			return "FORBIDDEN";
+		}
 
 		return TaskService.updateMarks(id, updates.username, updates.marks);
 	}
@@ -95,11 +113,18 @@ public class PostControllers {
 
 	@PostMapping("/api/task/{task}/notice")
 	public String addNotice(@CookieValue(name = "token", defaultValue = "") String token,
-			@RequestBody Announcement notice, @PathVariable String task)
-			throws NotAllowed, InterruptedException, ExecutionException {
+			@RequestBody Announcement notice, @PathVariable String task, HttpServletResponse response)
+			throws InterruptedException, ExecutionException {
 
-		if(token.equals("")) return "Not logged in";
-		if(!JWT_Helper.checkTeacher(token)) throw new NotAllowed();
+		if (token.equals("")){
+			response.setStatus(401);
+			return "UNAUTHORIZED";
+		}
+
+		if(!JWT_Helper.checkTeacher(token)){
+			response.setStatus(403);
+			return "FORBIDDEN";
+		}
 
 		notice.setOwner(JWT_Helper.getUsername(token));
 
