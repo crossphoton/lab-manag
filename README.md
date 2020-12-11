@@ -69,7 +69,9 @@ JSON Payload
 
 #### **Return values**
 
-<font color="green"> Success </font>
+**Success**
+
+Status <font color="green"> 200</font>
 
 JWT token in body and as a cookie.
 
@@ -100,7 +102,9 @@ none
 
 #### **Return values**
 
-<font color="green"> Success </font>
+**Success**
+
+Status <font color="green"> 200</font>
 
 Example:
 `Logged out`
