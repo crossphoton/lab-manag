@@ -23,7 +23,7 @@ import lab.management.Services.UserService;
 @RestController
 public class PostControllers {
 
-	@PostMapping("/api/announcement")
+	@PostMapping("/announcement")
 	public String postAnnouncement(@RequestBody Announcement toSave,
 			@CookieValue(name = "token", defaultValue = "") String token, HttpServletResponse response) {
 
@@ -43,7 +43,7 @@ public class PostControllers {
 
 	}
 
-	@PostMapping("/api/users")
+	@PostMapping("/users")
 	public String newUser(@RequestBody Users user, HttpServletResponse response) {
 
 		String result = null;
@@ -64,7 +64,7 @@ public class PostControllers {
 		return result;
 	}
 
-	@PostMapping("/api/task")
+	@PostMapping("/task")
 	public String postTask(@RequestBody Task toSave, @CookieValue(name = "token", defaultValue = "") String token, HttpServletResponse response)
 		{
 
@@ -87,7 +87,7 @@ public class PostControllers {
 		}
 	}
 
-	@PostMapping("/api/task/{id}/updateMarks")
+	@PostMapping("/task/{id}/updateMarks")
 	public String updateMarksInTask(@CookieValue(name = "token", defaultValue = "") String token,
 			@RequestBody UpdateMarks_HelperClass updates, @PathVariable String id, HttpServletResponse response)
 			throws InterruptedException, ExecutionException {
@@ -111,7 +111,7 @@ public class PostControllers {
 		public int marks;
 	}
 
-	@PostMapping("/api/task/{task}/notice")
+	@PostMapping("/task/{task}/notice")
 	public String addNotice(@CookieValue(name = "token", defaultValue = "") String token,
 			@RequestBody Announcement notice, @PathVariable String task, HttpServletResponse response)
 			throws InterruptedException, ExecutionException {

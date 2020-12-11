@@ -8,13 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.QuerySnapshot;
 import com.google.firebase.cloud.FirestoreClient;
 
 public class AnnouncementService {
@@ -23,14 +20,12 @@ public class AnnouncementService {
     static CollectionReference announcementReference = db.collection("announcement");
     
 
-    public static List<Object>get(){        
+    public static List<Object>get(){
 
-        ApiFuture<QuerySnapshot> future =  announcementReference.get();
         List<Object> data = new ArrayList<>();
-        List<QueryDocumentSnapshot> docs;
 
         try{
-            docs = future.get().getDocuments();
+            List<QueryDocumentSnapshot> docs = announcementReference.get().get().getDocuments();
             
             ObjectMapper mapper = new ObjectMapper();
             
@@ -51,21 +46,16 @@ public class AnnouncementService {
 
     public static Object get(String document){
 
-        DocumentReference docRef = announcementReference.document(document);
-
-        ApiFuture<DocumentSnapshot> future = docRef.get();
-
         Object result;
 
         try{
-
-        DocumentSnapshot doc = future.get();
-        if(doc.exists()){
-            result = doc.toObject(Object.class);
-        }
-        else{
-            result = new NotFound();
-        }
+            DocumentSnapshot doc = announcementReference.document(document).get().get();
+            if(doc.exists()){
+                result = doc.toObject(Object.class);
+            }
+            else{
+                result = new NotFound();
+            }
 
         } catch(Exception error){System.out.println(error); result = new ServerError();}
 

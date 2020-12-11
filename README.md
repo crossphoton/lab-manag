@@ -14,7 +14,7 @@ The system uses authentication to do most of tasks.
 
 ### Register a user
 
-POST `/api/users`
+POST `/users`
 
 Available to `Public`
 
@@ -54,7 +54,7 @@ Error <font color="yellow">  500 </font>: For server error
 
 ### Login a user
 
-GET `/api/users`
+GET `/users`
 
 Available to `Public`
 
@@ -89,7 +89,7 @@ Error <font color="yellow">  500 </font>: For server error
 
 ### Logout a user
 
-GET `/api/users/logout`
+GET `/users/logout`
 
 Available to `Public`
 
@@ -137,7 +137,7 @@ Tasks are created to evaluate students performance. Contains task details, total
 
 ### Creating a task
 
-POST `/api/task`
+POST `/task`
 
 Available to `Teachers`, `Admin`
 
@@ -171,7 +171,7 @@ Error <font color="yellow">  500 </font>: For server error
 
 ### Getting all tasks
 
-GET `/api/task`
+GET `/task`
 
 Available to `Students`, `Teachers`, `Admin`
 
@@ -233,7 +233,7 @@ Error <font color="yellow">  500 </font>: For server error
 
 ### Getting a particular task
 
-GET `/api/task/{task_id}`
+GET `/task/{task_id}`
 
 Available to `Students`, `Teachers`, `Admin`
 
@@ -272,7 +272,7 @@ Error <font color="yellow">  500 </font>: For server error
 
 ### Deleting a task
 
-DELETE `/api/task/{task_id}`
+DELETE `/task/{task_id}`
 
 Available to `Teachers`, `Admin`
 
@@ -337,7 +337,7 @@ Notices can be used by teachers to give updates to students for a given task.
 
 ### Creating an notice
 
-POST `/api/task/{task_id}/notice`
+POST `/task/{task_id}/notice`
 
 Available to `Teachers`, `Admin`
 
@@ -370,7 +370,7 @@ Error <font color="yellow">  500 </font>: For server error
 
 ### Getting all notices
 
-GET `/api/task/{task_id}/notice`
+GET `/task/{task_id}/notice`
 
 Available to `Students`, `Teachers`, `Admin`
 
@@ -415,7 +415,7 @@ Error <font color="yellow">  500 </font>: For server error
 
 ### Getting a particular notice
 
-GET `/api/task/{task_id}/notice/{notice_id}`
+GET `/task/{task_id}/notice/{notice_id}`
 
 Available to `Students`, `Teachers`, `Admin`
 
@@ -450,7 +450,7 @@ Error <font color="yellow">  500 </font>: For server error
 
 ### Deleting a notice
 
-DELETE `/api/task/{task_id}/notice/{notice_id}`
+DELETE `/task/{task_id}/notice/{notice_id}`
 
 Available to `Teachers`, `Admin`
 
@@ -513,7 +513,7 @@ These endpoints can be used by a teacher to update marks of students.
 
 ### Updating marks of a student
 
-POST `/api/task/{task_id}/updateMarks`
+POST `/task/{task_id}/updateMarks`
 
 Available to `Teachers`, `Admin`
 
@@ -570,7 +570,7 @@ Announcements can be used to give updates to students aside from tasks.
 
 ### Creating an announcement
 
-POST `/api/announcement`
+POST `/announcement`
 
 Available to `Teachers`, `Admin`
 
@@ -599,7 +599,7 @@ Error <font color="yellow">  500 </font>: For server error
 
 ### Getting all anouncements
 
-GET `/api/announcement`
+GET `/announcement`
 
 Available to `Students`, `Teachers`, `Admin`
 
@@ -641,7 +641,7 @@ Error <font color="yellow">  500 </font>: For server error
 
 ### Getting particular anouncement
 
-GET `/api/announcement/{announcement_id}`
+GET `/announcement/{announcement_id}`
 
 Available to `Students`, `Teachers`, `Admin`
 
@@ -676,7 +676,7 @@ Error <font color="yellow">  500 </font>: For server error
 
 ### Deleting an announcement
 
-DELETE `/api/announcement/{announcement_id}`
+DELETE `/announcement/{announcement_id}`
 
 Available to `Teachers`, `Admin`
 

@@ -14,7 +14,7 @@ import lab.management.Services.TaskService;
 @RestController
 public class DeleteController {
     
-    @DeleteMapping("/api/announcement/{id}")
+    @DeleteMapping("/announcement/{id}")
     public String deleteAnnouncement(@PathVariable String id, @CookieValue(name = "token", defaultValue = "")String token, HttpServletResponse response){
         if(!JWT_Helper.checkTeacher(token)) {
             response.setStatus(403);
@@ -23,7 +23,7 @@ public class DeleteController {
         return AnnouncementService.delete(id);
     }
     
-    @DeleteMapping("/api/task/{id}")
+    @DeleteMapping("/task/{id}")
     public String deleteTask(@PathVariable String id, @CookieValue(name = "token", defaultValue = "")String token, HttpServletResponse response){
         if(!JWT_Helper.checkTeacher(token)) {
             response.setStatus(403);
@@ -32,7 +32,7 @@ public class DeleteController {
         return TaskService.delete(id);
     }
 
-    @DeleteMapping("/api/task/{id}/notice/{notice}")
+    @DeleteMapping("/task/{id}/notice/{notice}")
     public String deleteNotice(@PathVariable String task, @CookieValue(name = "token", defaultValue = "")String token, @PathVariable String notice, HttpServletResponse response){
         if(!JWT_Helper.checkTeacher(token)) {
             response.setStatus(403);

@@ -11,7 +11,6 @@ import java.util.concurrent.ExecutionException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
@@ -92,10 +91,9 @@ public class TaskService {
 
     public static String updateMarks(String taskId, String username, Integer marks)
             throws InterruptedException, ExecutionException {
-
-        DocumentReference data = taskRef.document(taskId).get().get().getReference();
         
-        data.update("studentRecord." + username, marks);
+        taskRef.document(taskId).get().get().getReference()
+            .update("studentRecord." + username, marks);
 
         return "Updated!!";
     }

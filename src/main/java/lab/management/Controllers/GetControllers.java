@@ -31,7 +31,7 @@ public class GetControllers {
 		return "This is home. Go to https://www.github.com/crossphoton/lab-management for API usage.";
 	}
 	
-	@GetMapping("/api/announcement")
+	@GetMapping("/announcement")
 	public List<Object> getAllAnnouncements(@CookieValue(name = "token", defaultValue = "") String token, HttpServletResponse response) {
 		if(!JWT_Helper.checkStudent(token)){
 			response.setStatus(401);
@@ -40,7 +40,7 @@ public class GetControllers {
 		return AnnouncementService.get();
 	}
 
-	@GetMapping("/api/announcement/{id}")
+	@GetMapping("/announcement/{id}")
 	public Object getAnnouncement(@PathVariable String id, @CookieValue(name = "token", defaultValue = "") String token, HttpServletResponse response) {
 		if(!JWT_Helper.checkStudent(token)){
 			response.setStatus(401);
@@ -55,7 +55,7 @@ public class GetControllers {
 		return result;
 	}
 
-	@GetMapping(value="/api/users")
+	@GetMapping(value="/users")
 	public String getMethodName(@RequestBody HashMap<Object, Object> user, HttpServletResponse response) {
 		String result = null;
 
@@ -78,13 +78,13 @@ public class GetControllers {
 		return result;
 	}
 
-	@GetMapping("/api/users/logout")
+	@GetMapping("/users/logout")
 	public String logout(HttpServletResponse response){
 		response.addHeader("Set-Cookie", "token="+null+"; Path=/;HttpOnly;Max-Age=0");
 		return "Logged out";
 	}
 	
-	@GetMapping("/api/task")
+	@GetMapping("/task")
 	public List<Object> getAllTasks(@CookieValue(name = "token", defaultValue = "") String token, HttpServletResponse response) {
 		if(!JWT_Helper.checkStudent(token)){
 			response.setStatus(401);
@@ -93,7 +93,7 @@ public class GetControllers {
 		return TaskService.get();
 	}
 
-	@GetMapping("/api/task/{id}")
+	@GetMapping("/task/{id}")
 	public Object getTask(@PathVariable String id, @CookieValue(name = "token", defaultValue = "") String token, HttpServletResponse response) {
 		if(!JWT_Helper.checkStudent(token)){
 			response.setStatus(401);
@@ -108,7 +108,7 @@ public class GetControllers {
 		return result;
 	}
 
-	@GetMapping("/api/task/{task}/notice")
+	@GetMapping("/task/{task}/notice")
 	public List<Object> getAllNotice(@CookieValue(name = "token", defaultValue = "") String token, @PathVariable String task, HttpServletResponse response) {
 		if(!JWT_Helper.checkStudent(token)){
 			response.setStatus(401);
@@ -117,7 +117,7 @@ public class GetControllers {
 		return TaskService.getNotice(task);
 	}
 
-	@GetMapping("/api/task/{task}/notice/{notice}")
+	@GetMapping("/task/{task}/notice/{notice}")
 	public Object getNotice(@CookieValue(name = "token", defaultValue = "") String token, @PathVariable String task, @PathVariable String notice, HttpServletResponse response) {
 		if(!JWT_Helper.checkStudent(token)){
 			response.setStatus(401);
