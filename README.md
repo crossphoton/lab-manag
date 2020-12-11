@@ -18,7 +18,7 @@ POST `/api/users`
 
 Available to `Public`
 
-#### JSON Payload
+#### **JSON Payload**
 
 ```
 {
@@ -31,7 +31,7 @@ Available to `Public`
 **Note:** By default a new user is assigned the Student level permission.
 Admin can go to firebase dashboard to update permissions.
 
-#### Return values
+#### **Return values**
 
 **Success**
 
@@ -67,7 +67,7 @@ JSON Payload
 }
 ```
 
-#### Return values
+#### **Return values**
 
 <font color="green"> Success </font>
 
@@ -84,6 +84,26 @@ Error <font color="red">  404 </font>: For not registered user
 Error <font color="red">  405 </font>: For wrong password
 
 Error <font color="yellow">  500 </font>: For server error
+
+<br>
+
+### Logout a user
+
+GET `/api/users/logout`
+
+Available to `Public`
+
+JSON Payload
+
+
+none
+
+#### **Return values**
+
+<font color="green"> Success </font>
+
+Example:
+`Logged out`
 
 
 <br>
@@ -131,7 +151,7 @@ JSON Payload
 }
 ```
 
-#### Return values
+#### **Return values**
 
 **Success**
 
@@ -159,7 +179,7 @@ JSON Payload
 
 none
 
-#### Return values
+#### **Return values**
 
 **Success**
 
@@ -221,7 +241,7 @@ JSON Payload
 
 none
 
-#### Return values
+#### **Return values**
 
 **Success**
 
@@ -260,7 +280,7 @@ JSON Payload
 
 none
 
-#### Return values
+#### **Return values**
 
 **Success**
 
@@ -330,7 +350,7 @@ JSON Payload
 }
 ```
 
-#### Return values
+#### **Return values**
 
 **Success**
 
@@ -358,7 +378,7 @@ JSON Payload
 
 none
 
-#### Return values
+#### **Return values**
 
 **Success**
 
@@ -403,7 +423,7 @@ JSON Payload
 
 none
 
-#### Return values
+#### **Return values**
 
 **Success**
 
@@ -438,7 +458,7 @@ JSON Payload
 
 none
 
-#### Return values
+#### **Return values**
 
 **Success**
 
@@ -506,7 +526,7 @@ JSON Payload
 }
 ```
 
-#### Return values
+#### **Return values**
 
 **Success**
 
@@ -563,7 +583,7 @@ JSON Payload
 }
 ```
 
-#### Return values
+#### **Return values**
 
 **Success**
 
@@ -587,7 +607,7 @@ JSON Payload
 
 none
 
-#### Return values
+#### **Return values**
 
 **Success**
 
@@ -629,7 +649,7 @@ JSON Payload
 
 none
 
-#### Return values
+#### **Return values**
 
 **Success**
 
@@ -664,7 +684,7 @@ JSON Payload
 
 none
 
-#### Return values
+#### **Return values**
 
 **Success**
 

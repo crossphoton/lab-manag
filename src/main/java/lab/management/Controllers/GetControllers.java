@@ -77,6 +77,12 @@ public class GetControllers {
 
 		return result;
 	}
+
+	@GetMapping("/api/users/logout")
+	public String logout(HttpServletResponse response){
+		response.addHeader("Set-Cookie", "token="+null+"; Path=/;HttpOnly;Max-Age=0");
+		return "Logged out";
+	}
 	
 	@GetMapping("/api/task")
 	public List<Object> getAllTasks(@CookieValue(name = "token", defaultValue = "") String token, HttpServletResponse response) {
